@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com</groupId>
-	<artifactId>ordermanagment</artifactId>
+	<artifactId>order-managment</artifactId>
 	<packaging>war</packaging>
 	<version>1.0</version>
-	<name>ordermanagment Maven Webapp</name>
+	<name>order-managment Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -52,7 +52,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>ordermanagment</finalName>
+		<finalName>order-managment</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

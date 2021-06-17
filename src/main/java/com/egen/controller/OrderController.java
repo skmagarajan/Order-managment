@@ -1,50 +1,51 @@
 package com.egen.controller;
 
 import com.egen.model.Order;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.egen.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
+@RequestMapping(value="order")
 public class OrderController {
-    /**
-     * implement the following endpoints
-     */
 
-    @GetMapping("order")
-    public ResponseEntity<List<Order>> getAllOrders(){
-        //TODO
-        return ResponseEntity.ok(Collections.singletonList(new Order("id")));
+    @Autowired
+    private OrderService orderService;
+
+    @RequestMapping(method= RequestMethod.GET)
+    public List<Order> getAllOrders(){
+        return orderService.getAllOrders();
     }
 
-    public ResponseEntity<List<Order>> getOrderById(String id){
-        //TODO
-        return null;
+    @RequestMapping(method = RequestMethod.GET, value="/id/{id}")
+    public Order getOrderById(@PathVariable("id") String id){
+            return orderService.getOrderById(id);
     }
 
-    public ResponseEntity<List<Order>> getAllOrdersWithInInterval(ZonedDateTime startTime, ZonedDateTime endTime){
-        //TODO
-        return null;
+    @RequestMapping(method = RequestMethod.GET, value="/interval/{start}/{end}")
+    public List<Order> getAllOrdersWithInInterval(@PathVariable("start") String startTime, @PathVariable("end") String endTime){
+        return orderService.getAllOrdersWithinInterval(startTime, endTime);
     }
 
-    public ResponseEntity<List<Order>> top10OrdersWithHighestDollarAmountInZip(String zip){
-        //TODO
-        return null;
+    @RequestMapping(method = RequestMethod.GET, value="/zip/{zip}")
+    public List<Order> top10OrdersWithHighestDollarAmountInZip(String zip){
+        return orderService.getTop10OrdersWithHighestDollarAmountInZip(zip);
     }
 
-    public ResponseEntity<Order> placeOrder(Order order){
-        return null;
+    @RequestMapping(method = RequestMethod.POST)
+    public Order placeOrder(@RequestBody Order order){
+        return orderService.placeOrder(order);
     }
 
-    public ResponseEntity<Order> cancelOrder(Order order){
-        return null;
+    @RequestMapping(method = RequestMethod.DELETE, value="/cancel/{id}")
+    public void cancelOrder(@PathVariable("id") String order){
+        orderService.delete(order);
     }
 
-    public ResponseEntity<Order> updateOrder(Order order){
-        return null;
+    @RequestMapping(method = RequestMethod.PUT, value={"/update/{id}"})
+    public Order updateOrder(@PathVariable("id") String orderId,@RequestBody Order order){
+        return orderService.update(orderId, order);
     }
 }

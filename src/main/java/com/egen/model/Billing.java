@@ -1,17 +1,27 @@
 package com.egen.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.UUID;
 
+@Entity
 public class Billing {
+    @Id
+    @Column(columnDefinition = "VARCHAR(36)")
     private String billingId;
+
     private String addressLine1;
     private String addressLine2;
     private String city;
     private String state;
     private String zip;
 
-    public Billing(String addressLine1, String addressLine2, String city, String state, String zip) {
+    public Billing(){
         this.billingId = UUID.randomUUID().toString();
+    }
+
+    public Billing(String addressLine1, String addressLine2, String city, String state, String zip) {
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.city = city;
@@ -19,7 +29,7 @@ public class Billing {
         this.zip = zip;
     }
 
-    public String getShippingId() {
+    public String getBillingId() {
         return billingId;
     }
 
@@ -65,5 +75,17 @@ public class Billing {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    @Override
+    public String toString() {
+        return "Billing{" +
+                "billingId='" + billingId + '\'' +
+                ", addressLine1='" + addressLine1 + '\'' +
+                ", addressLine2='" + addressLine2 + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                '}';
     }
 }

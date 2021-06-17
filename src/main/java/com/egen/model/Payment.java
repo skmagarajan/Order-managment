@@ -1,17 +1,27 @@
 package com.egen.model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
+@Entity
 public class Payment {
-    private String paymentMethod;
-    private Date payment_date;
+    @Id
+    @Column(columnDefinition="VARCHAR(36)")
     private String confirmationNumber;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+    private Date payment_date;
+
     private String orderTax;
     private BigDecimal shippingCharges;
     private BigDecimal orderTotal;
+
+    public Payment(){
+        this.confirmationNumber = UUID.randomUUID().toString();
+    }
 
     public String getOrderTax() {
         return orderTax;
@@ -37,11 +47,11 @@ public class Payment {
         this.orderTotal = orderTotal;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -59,5 +69,17 @@ public class Payment {
 
     public void setConfirmationNumber(String confirmationNumber) {
         this.confirmationNumber = confirmationNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "confirmationNumber='" + confirmationNumber + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", payment_date=" + payment_date +
+                ", orderTax='" + orderTax + '\'' +
+                ", shippingCharges=" + shippingCharges +
+                ", orderTotal=" + orderTotal +
+                '}';
     }
 }

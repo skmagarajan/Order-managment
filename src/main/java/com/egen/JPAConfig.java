@@ -1,8 +1,12 @@
 package com.egen;
 
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -14,26 +18,37 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class JPAConfig {
 
-//	@Bean
+	@Bean
 	public LocalContainerEntityManagerFactoryBean emf() {
-		//TODO: configure emf
-		return null;
+		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+		emf.setDataSource(dataSource());
+		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		emf.setJpaProperties(jpaProperties());
+		emf.setPackagesToScan("com.egen.model");
+		return emf;
 	}
 
-//	@Bean
+	@Bean
 	public DataSource dataSource() {
-		//TODO: configure data source bean
-		return  null;
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		ds.setUrl("jdbc:mysql://localhost:3306/order_management?verifyServerCertificate=false&useSSL=false&requireSSL=false");
+		ds.setUsername("root");
+		ds.setPassword("saran");
+		return ds;
 	}
 
-//	@Bean
+	@Bean
 	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-		//TODO: configure transaction manager
-		return null;
+		JpaTransactionManager tx = new JpaTransactionManager(emf);
+		return tx;
 	}
 
 	private Properties jpaProperties() {
-		//TODO: configure jpa properties
-		return null;
+		Properties props = new Properties();
+		props.put("hibernate.dialect","org.hibernate.dialect.MySQL57Dialect");
+		props.put("hibernate.hbm2ddl.auto","validate");
+		props.put("hibernate.show_sql","true");
+		return props;
 	}
 }

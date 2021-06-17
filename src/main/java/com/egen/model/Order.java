@@ -1,27 +1,55 @@
 package com.egen.model;
 
-import java.math.BigDecimal;
+import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name="orders")
+@NamedQueries({
+        @NamedQuery(name="Order.getAllOrders", query = "SELECT order FROM Order order"),
+        @NamedQuery(name="Order.getOrdersWithinInterval", query="SELECT order FROM Order order where order.dateCreated>:start and order.dateCreated<:end"),
+        @NamedQuery(name="Order.getTop10OrdersWithHighestDollarAmountInZip", query="SELECT order FROM Order order where order.billingAddress.zip=:zip order by order.payment.orderTotal DESC")
+})
 
 public class Order {
+    @Id
+    @Column(columnDefinition = "VARCHAR(36)")
     private String id;
-    private String orderStatus;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
     private String customerId;
+    @OneToMany
     private List<Item> items;
-    private List<Payment> payment;
+
+    @OneToOne
+    private Payment payment;
+    @OneToOne
     private Billing billingAddress;
-    private String deliveryType;
+
+    @Enumerated(EnumType.STRING)
+    private DeliveryType deliveryType;
+    @OneToOne
     private Shipping shippingAddress;
 
-    public Order(String id){
-        this.id = id;
+    private Date dateCreated;
+    private Date dateModified;
+
+    public Order(){
+
     }
 
-    public String getOrderStatus() {
+    public Order(String id){
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -41,11 +69,11 @@ public class Order {
         this.items = items;
     }
 
-    public List<Payment> getPayment() {
+    public Payment getPayment() {
         return payment;
     }
 
-    public void setPayment(List<Payment> payment) {
+    public void setPayment(Payment payment) {
         this.payment = payment;
     }
 
@@ -57,11 +85,11 @@ public class Order {
         this.billingAddress = billingAddress;
     }
 
-    public String getDeliveryType() {
+    public DeliveryType getDeliveryType() {
         return deliveryType;
     }
 
-    public void setDeliveryType(String deliveryType) {
+    public void setDeliveryType(DeliveryType deliveryType) {
         this.deliveryType = deliveryType;
     }
 
@@ -79,5 +107,21 @@ public class Order {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                ", orderStatus=" + orderStatus +
+                ", customerId='" + customerId + '\'' +
+                ", items=" + items +
+                ", payment=" + payment +
+                ", billingAddress=" + billingAddress +
+                ", deliveryType=" + deliveryType +
+                ", shippingAddress=" + shippingAddress +
+                ", dateCreated=" + dateCreated +
+                ", dateModified=" + dateModified +
+                '}';
     }
 }

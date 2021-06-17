@@ -1,8 +1,14 @@
 package com.egen.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.UUID;
 
+@Entity
 public class Shipping {
+    @Id
+    @Column(columnDefinition="VARCHAR(36)")
     private String shippingId;
     private String addressLine1;
     private String addressLine2;
@@ -10,8 +16,11 @@ public class Shipping {
     private String state;
     private String zip;
 
-    public Shipping(String addressLine1, String addressLine2, String city, String state, String zip) {
+    public Shipping(){
         this.shippingId = UUID.randomUUID().toString();
+    }
+
+    public Shipping(String addressLine1, String addressLine2, String city, String state, String zip) {
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.city = city;
@@ -65,6 +74,18 @@ public class Shipping {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    @Override
+    public String toString() {
+        return "Shipping{" +
+                "shippingId='" + shippingId + '\'' +
+                ", addressLine1='" + addressLine1 + '\'' +
+                ", addressLine2='" + addressLine2 + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                '}';
     }
 }
 
